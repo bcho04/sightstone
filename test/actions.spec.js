@@ -23,6 +23,14 @@ const GaleforceNull = new GaleforceModule({
 
 // Set up nock
 const replyValues = {
+    v5: {
+        match: {
+            match: require('./test-data/v5.match.match.by-match.json'),
+            timeline: require('./test-data/v5.match.timeline.by-match.json'),
+            matchlist: require('./test-data/v5.match.matchlist.by-puuid.json'),
+            matchlistFiltered: require('./test-data/v5.match.matchlist.by-puuid.filtered.json'),
+        },
+    },
     v4: {
         summoner: require('./test-data/v4.summoner.by-name.json'),
         league: {
@@ -33,13 +41,6 @@ const replyValues = {
             challenger: require('./test-data/v4.league.challenger.json'),
             diamondIV: require('./test-data/v4.league.diamond4.json'),
             masterExp: require('./test-data/v4.league-exp.json'),
-        },
-        match: {
-            matchByMatchId: require('./test-data/v4.match.match.by-match.json'),
-            timelineByMatchId: require('./test-data/v4.match.timeline.by-match.json'),
-            matchlistByAccountId: require('./test-data/v4.match.matchlist.by-account.json'),
-            matchesByTournament: require('./test-data/v4.match.matchlist.by-tournament.json'),
-            matchlistFiltered: require('./test-data/v4.match.matchlist.by-account.filtered.json'),
         },
         championMastery: {
             bySummonerId: require('./test-data/v4.champion-mastery.by-summoner.json'),
@@ -164,18 +165,6 @@ const na1API = nock('https://na1.api.riotgames.com')
     .reply(200, replyValues.v4.league.masterExp)
     .get('/lol/league/v4/leagues/df776d6f-4101-4817-a36d-689a4be85887')
     .reply(200, replyValues.v4.league.league)
-    .get('/lol/match/v4/matches/3724412289')
-    .reply(200, replyValues.v4.match.matchByMatchId)
-    .get('/lol/match/v4/timelines/by-match/3724412289')
-    .reply(200, replyValues.v4.match.timelineByMatchId)
-    .get('/lol/match/v4/matchlists/by-account/xG5uPpEaSFc8LvOmi4wIumQZHbTlI6WJqECcgsW-_qu_BG4')
-    .reply(200, replyValues.v4.match.matchlistByAccountId)
-    .get('/lol/match/v4/matchlists/by-account/accountId?champion=498&endIndex=10')
-    .reply(200, replyValues.v4.match.matchlistFiltered)
-    .get('/lol/match/v4/matches/by-tournament-code/1234/ids')
-    .reply(200, replyValues.v4.match.matchesByTournament)
-    .get('/lol/match/v4/matches/3724412289/by-tournament-code/1234')
-    .reply(200, replyValues.v4.match.matchByMatchId)
     .get('/lol/champion-mastery/v4/champion-masteries/by-summoner/l3ZbR4AKKKK47w170ZOqcu7kmSV2qb38RV7zK_4n1GucI0w')
     .reply(200, replyValues.v4.championMastery.bySummonerId)
     .get('/lol/champion-mastery/v4/champion-masteries/by-summoner/l3ZbR4AKKKK47w170ZOqcu7kmSV2qb38RV7zK_4n1GucI0w/by-champion/498')
@@ -275,7 +264,15 @@ const americasAPI = nock('https://americas.api.riotgames.com')
     .get('/tft/match/v1/matches/by-puuid/puuid/ids?count=5')
     .reply(200, replyValues.v1.tftMatch.matchlist)
     .get('/tft/match/v1/matches/NA1_3701236130')
-    .reply(200, replyValues.v1.tftMatch.match);
+    .reply(200, replyValues.v1.tftMatch.match)
+    .get('/lol/match/v5/matches/NA1_3891319810')
+    .reply(200, replyValues.v5.match.match)
+    .get('/lol/match/v5/matches/NA1_3891319810/timeline')
+    .reply(200, replyValues.v5.match.timeline)
+    .get('/lol/match/v5/matches/by-puuid/jkxCVExyvEawqoKz-BfIgcvOyT4z8YbYmRSISvxObtrq-JAfX8mCJ4OpEvQ_b9aHJRLZ-NNIfhHr8g/ids')
+    .reply(200, replyValues.v5.match.matchlist)
+    .get('/lol/match/v5/matches/by-puuid/jkxCVExyvEawqoKz-BfIgcvOyT4z8YbYmRSISvxObtrq-JAfX8mCJ4OpEvQ_b9aHJRLZ-NNIfhHr8g/ids?start=0&count=1')
+    .reply(200, replyValues.v5.match.matchlistFiltered)
 
 const naAPI = nock('https://na.api.riotgames.com')
     .get('/val/content/v1/contents')
@@ -523,36 +520,25 @@ describe('/galeforce/actions', () => {
             describe('.match', () => {
                 describe('.match()', () => {
                     describe('.matchId()', () => {
-                        it('should return correct JSON for the /lol/match/v4/matches Riot API endpoint', () => expect(Galeforce.lol.match.match().region(Galeforce.regions.lol.NORTH_AMERICA).matchId('3724412289').exec())
-                            .to.eventually.deep.equal(replyValues.v4.match.matchByMatchId));
-                        describe('.tournamentCode()', () => {
-                            it('should return correct JSON for the /lol/match/v4/matches/{}/by-tournament-code Riot API endpoint', () => expect(Galeforce.lol.match.match().region(Galeforce.regions.lol.NORTH_AMERICA).matchId('3724412289').tournamentCode('1234')
-                                .exec())
-                                .to.eventually.deep.equal(replyValues.v4.match.matchByMatchId));
-                        });
+                        it('should return correct JSON for the /lol/match/v5/matches/{matchId} Riot API endpoint', () => expect(Galeforce.lol.match.match().region(Galeforce.regions.riot.AMERICAS).matchId('NA1_3891319810').exec())
+                            .to.eventually.deep.equal(replyValues.v5.match.match));
                     });
                 });
                 describe('.timeline()', () => {
                     describe('.matchId()', () => {
-                        it('should return correct JSON for the /lol/match/v4/timelines/by-match Riot API endpoint', () => expect(Galeforce.lol.match.timeline().region(Galeforce.regions.lol.NORTH_AMERICA).matchId('3724412289').exec())
-                            .to.eventually.deep.equal(replyValues.v4.match.timelineByMatchId));
+                        it('should return correct JSON for the /lol/match/v5/matches/{matchId}/timeline Riot API endpoint', () => expect(Galeforce.lol.match.timeline().region(Galeforce.regions.riot.AMERICAS).matchId('NA1_3891319810').exec())
+                            .to.eventually.deep.equal(replyValues.v5.match.timeline));
                     });
                 });
                 describe('.list()', () => {
-                    describe('.accountId()', () => {
-                        it('should return correct JSON for the /lol/match/v4/matchlists/by-account/ Riot API endpoint', () => expect(Galeforce.lol.match.list().region(Galeforce.regions.lol.NORTH_AMERICA).accountId('xG5uPpEaSFc8LvOmi4wIumQZHbTlI6WJqECcgsW-_qu_BG4').exec())
-                            .to.eventually.deep.equal(replyValues.v4.match.matchlistByAccountId));
+                    describe('.puuid()', () => {
+                        it('should return correct JSON for the /lol/match/v5/matches/by-puuid/{puuid}/ids Riot API endpoint', () => expect(Galeforce.lol.match.list().region(Galeforce.regions.riot.AMERICAS).puuid('jkxCVExyvEawqoKz-BfIgcvOyT4z8YbYmRSISvxObtrq-JAfX8mCJ4OpEvQ_b9aHJRLZ-NNIfhHr8g').exec())
+                            .to.eventually.deep.equal(replyValues.v5.match.matchlist));
                         describe('.query()', () => {
-                            it('should return correct JSON for the /lol/match/v4/matchlists/by-account/ Riot API endpoint with query', () => expect(Galeforce.lol.match.list().region(Galeforce.regions.lol.NORTH_AMERICA).accountId('accountId').query({ champion: 498, endIndex: 10 })
+                            it('should return correct JSON for the /lol/match/v5/matches/by-puuid/{puuid}/ids Riot API endpoint with query', () => expect(Galeforce.lol.match.list().region(Galeforce.regions.riot.AMERICAS).puuid('jkxCVExyvEawqoKz-BfIgcvOyT4z8YbYmRSISvxObtrq-JAfX8mCJ4OpEvQ_b9aHJRLZ-NNIfhHr8g').query({ start: 0, count: 1 })
                                 .exec())
-                                .to.eventually.deep.equal(replyValues.v4.match.matchlistFiltered));
+                                .to.eventually.deep.equal(replyValues.v5.match.matchlistFiltered));
                         });
-                    });
-                });
-                describe('.tournament()', () => {
-                    describe('.tournamentCode()', () => {
-                        it('should return correct JSON for the /lol/match/v4/matches/by-tournament-code/{}/ids Riot API endpoint', () => expect(Galeforce.lol.match.tournament().region(Galeforce.regions.lol.NORTH_AMERICA).tournamentCode('1234').exec())
-                            .to.eventually.deep.equal(replyValues.v4.match.matchesByTournament));
                     });
                 });
             });

@@ -148,8 +148,7 @@ export default class Action<TResult> {
      * Returns the **encoded** target URL for the action without executing an HTTP request.
      * Useful if the URL string is needed for custom actions outside the scope of the library.
      * @throws Will throw an error if a required payload value (*region*,
-     * *body* on POST or PUT requests, etc.) is missing or the HTTP request
-     * fails with an error.
+     * *body* on POST or PUT requests, etc.) is missing.
      */
     public URL(): string {
         this.inferEndpoint();

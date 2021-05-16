@@ -35,11 +35,9 @@ export const LEAGUE = {
 };
 
 export const MATCH = {
-    MATCHLIST: 'https://${region}.api.riotgames.com/lol/match/v4/matchlists/by-account/${accountId}',
-    MATCH_ID: 'https://${region}.api.riotgames.com/lol/match/v4/matches/${matchId}',
-    MATCH_ID_TOURNAMENT: 'https://${region}.api.riotgames.com/lol/match/v4/matches/${matchId}/by-tournament-code/${tournamentCode}',
-    TOURNAMENT_CODE: 'https://${region}.api.riotgames.com/lol/match/v4/matches/by-tournament-code/${tournamentCode}/ids',
-    TIMELINE: 'https://${region}.api.riotgames.com/lol/match/v4/timelines/by-match/${matchId}',
+    MATCHLIST: 'https://${region}.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids',
+    MATCH_ID: 'https://${region}.api.riotgames.com/lol/match/v5/matches/${matchId}',
+    TIMELINE: 'https://${region}.api.riotgames.com/lol/match/v5/matches/${matchId}/timeline',
 };
 
 export const PLATFORM = {

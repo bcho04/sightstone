@@ -1,7 +1,6 @@
 export { SummonerDTO } from './dto/riot-api/summoner-v4/summoner';
-export { MatchDTO } from './dto/riot-api/match-v4/match';
-export { MatchTimelineDTO } from './dto/riot-api/match-v4/match-timeline';
-export { MatchlistDTO } from './dto/riot-api/match-v4/matchlist';
+export { MatchDTO } from './dto/riot-api/match-v5/match';
+export { MatchTimelineDTO } from './dto/riot-api/match-v5/match-timeline';
 export { LeagueEntryDTO } from './dto/riot-api/league/league-entry';
 export { ChampionMasteryDTO } from './dto/riot-api/champion-mastery-v4/champion-mastery';
 export { PlatformDataDTO } from './dto/riot-api/platform/platform-data';

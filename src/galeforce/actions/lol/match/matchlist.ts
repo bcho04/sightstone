@@ -1,30 +1,24 @@
 import Action from '../../action';
-import { MatchlistDTO } from '../../../interfaces/dto';
-import { ENDPOINTS, LeagueRegion } from '../../../../riot-api';
+import { ENDPOINTS, RiotRegion } from '../../../../riot-api';
 import SubmoduleMap from '../../../interfaces/submodule-map';
-import { TakesAccountId, TakesQuery, TakesRegion } from '../../mixins';
+import { TakesPUUID, TakesQuery, TakesRegion } from '../../mixins';
 
 type GetMatchlistQuery = {
-    champion?: number[];
-    queue?: number[];
-    season?: number[];
-    endTime?: number;
-    beginTime?: number;
-    endIndex?: number;
-    beginIndex?: number;
+    start?: number;
+    count?: number;
 }
 
-const BaseAction = TakesAccountId(
+const BaseAction = TakesPUUID(
     TakesQuery({} as GetMatchlistQuery,
-        TakesRegion({} as LeagueRegion,
+        TakesRegion({} as RiotRegion,
             Action)),
 );
 
-export default class GetMatchlist extends BaseAction<MatchlistDTO> {
+export default class GetMatchlist extends BaseAction<string[]> {
     constructor(submodules: SubmoduleMap) {
         super(submodules);
         this.payload.endpoint = ENDPOINTS.MATCH.MATCHLIST;
-        this.payload.type = 'lol';
+        this.payload.type = 'riot';
         this.payload.method = 'GET';
     }
 }

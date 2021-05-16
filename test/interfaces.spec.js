@@ -31,28 +31,19 @@ describe('/galeforce/interfaces', () => {
             });
         });
         describe('MatchDTO', () => {
-            it('should match with /lol/match/v4/matches JSON data', () => {
+            it('should match with /lol/match/v5/matches/{matchId} JSON data', () => {
                 const schema = generator.getSchemaForSymbol('MatchDTO');
                 const validate = ajv.compile(schema);
-                const valid = validate(require('./test-data/v4.match.match.by-match.json'));
+                const valid = validate(require('./test-data/v5.match.match.by-match.json'));
                 if (!valid) throw validate.errors;
                 expect(valid).to.be.true;
             });
         });
         describe('MatchTimelineDTO', () => {
-            it('should match with /lol/match/v4/timelines/by-match JSON data', () => {
+            it('should match with /lol/match/v5/matches/{matchId}/timeline JSON data', () => {
                 const schema = generator.getSchemaForSymbol('MatchTimelineDTO');
                 const validate = ajv.compile(schema);
-                const valid = validate(require('./test-data/v4.match.timeline.by-match.json'));
-                if (!valid) throw validate.errors;
-                expect(valid).to.be.true;
-            });
-        });
-        describe('MatchlistDTO', () => {
-            it('should match with /lol/match/v4/matchlists/by-account/ JSON data', () => {
-                const schema = generator.getSchemaForSymbol('MatchlistDTO');
-                const validate = ajv.compile(schema);
-                const valid = validate(require('./test-data/v4.match.matchlist.by-account.json'));
+                const valid = validate(require('./test-data/v5.match.timeline.by-match.json'));
                 if (!valid) throw validate.errors;
                 expect(valid).to.be.true;
             });

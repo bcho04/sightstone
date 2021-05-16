@@ -224,13 +224,13 @@ interface ParticipantDTO {
     stats: ParticipantStatsDTO;
     teamId: Team; // number, but only two legal values
     timeline: ParticipantTimelineDTO;
-    spell1Id: number;
-    spell2Id: number;
+    summoner1Id: number;
+    summoner2Id: number;
     highestAchievedSeasonTier?: Tier;
     masteries?: MasteryDTO;
 }
 
-export interface MatchDTO {
+interface MatchInfoDTO {
     gameId: number;
     gameCreation: number;
     gameDuration: number;
@@ -242,6 +242,16 @@ export interface MatchDTO {
     participants: ParticipantDTO[];
     platformId: string;
     queueId: number;
-    seasonId: number;
     teams: TeamStatsDTO[];
+}
+
+interface MatchMetadataDTO {
+    dataVersion: string;
+    matchId: string;
+    participants: string[];
+}
+
+export interface MatchDTO {
+    metadata: MatchMetadataDTO;
+    info: MatchInfoDTO;
 }

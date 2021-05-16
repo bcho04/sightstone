@@ -20,7 +20,6 @@ import GetChampionRotations from './galeforce/actions/lol/champion';
 import GetClashPlayers from './galeforce/actions/lol/clash/players';
 import GetClashTeam from './galeforce/actions/lol/clash/teams';
 import GetClashTournament from './galeforce/actions/lol/clash/tournaments';
-import GetTournamentMatches from './galeforce/actions/lol/match/tournament-matches';
 import GetCurrentGameInfo from './galeforce/actions/lol/spectator/active-games';
 import GetFeaturedGames from './galeforce/actions/lol/spectator/featured-games';
 import GetMasteryScore from './galeforce/actions/lol/champion-mastery/score';
@@ -187,25 +186,19 @@ class Galeforce {
         match: {
             /**
              * Action constructor corresponding to the following endpoints:
-             * - (**GET**) `/lol/match/v4/matches/{matchId}`
-             * - (**GET**) `/lol/match/v4/matches/by-tournament-code/{tournamentCode}/ids`
+             * - (**GET**) `/lol/match/v5/matches/{matchId}`
              */
             match: (): GetMatch => new GetMatch(this.submodules),
             /**
              * Action constructor corresponding to the following endpoints:
-             * - (**GET**) `/lol/match/v4/timelines/by-match/{matchId}`
+             * - (**GET**) `/lol/match/v5/matches/{matchId}/timeline`
              */
             timeline: (): GetTimeline => new GetTimeline(this.submodules),
             /**
              * Action constructor corresponding to the following endpoints:
-             * - (**GET**) `/lol/match/v4/matchlists/by-account/{encryptedAccountId}`
+             * - (**GET**) `/lol/match/v5/matches/by-puuid/{puuid}/ids`
              */
             list: (): GetMatchlist => new GetMatchlist(this.submodules),
-            /**
-             * Action constructor corresponding to the following endpoints:
-             * - (**GET**) `/lol/match/v4/matches/{matchId}/by-tournament-code/{tournamentCode}`
-             */
-            tournament: (): GetTournamentMatches => new GetTournamentMatches(this.submodules),
         },
         /**
          * Object containing actions corresponding to the `/lol/platform` set of endpoints.
